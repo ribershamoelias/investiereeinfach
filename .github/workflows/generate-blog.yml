@@ -1,0 +1,40 @@
+name: Generate Blog Index
+
+on:
+  push:
+    paths:
+      - 'blog/*.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Generate Blog Index
+        run: |
+          BLOG_DIR="./blog"
+          OUTPUT_FILE="$BLOG_DIR/index.html"
+
+          echo "<!DOCTYPE html>" > $OUTPUT_FILE
+          echo "<html lang='de'><head><meta charset='UTF-8'><title>Blog | InvestiereEinfach</title></head><body>" >> $OUTPUT_FILE
+          echo "<h1>Blog-Artikel</h1><ul>" >> $OUTPUT_FILE
+
+          for file in $(ls -t $BLOG_DIR/*.md); do
+            filename=$(basename "$file")
+            title=$(head -n 1 "$file" | sed 's/^# //')
+            echo "<li><a href='$filename'>$title</a></li>" >> $OUTPUT_FILE
+          done
+
+          echo "</ul><hr><a href='../index.html'>Zurück zur Startseite</a>" >> $OUTPUT_FILE
+          echo "</body></html>" >> $OUTPUT_FILE
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add blog/index.html
+          git commit -m "🔁 Blog-Index automatisch aktualisiert" || echo "No changes"
+          git push
