@@ -1,0 +1,18 @@
+title: Investiere Einfach
+description: Ein Blog über Aktien, Börse und den einfachen Einstieg ins Investieren.
+baseurl: ""
+url: "https://investiereeinfach.github.io"
+theme: minima
+
+# Optional für Navigation
+header_pages:
+  - index.md
+  - about.md
+
+author:
+  name: "Riber Shamo Elias"
+  email: "kontakt@investiereeinfach.de"
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
